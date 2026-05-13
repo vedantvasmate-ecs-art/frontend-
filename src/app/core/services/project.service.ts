@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ProjectRequest, ProjectResponse, AddMemberRequest } from '../models/project.model';
 import { User } from '../models/user.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
-  private readonly API_URL = 'http://localhost:8080/api/projects';
+  private readonly API_URL = `${environment.apiUrl}/projects`;
 
   constructor(private http: HttpClient) {}
 
