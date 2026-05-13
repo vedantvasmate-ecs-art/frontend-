@@ -35,15 +35,6 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Copy built Angular app from build stage
 COPY --from=build /app/dist/company-ethara-frontend/browser /usr/share/nginx/html
 
-# Fix line endings (Windows → Unix) and set PORT dynamically
-RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
-    echo 'set -e' >> /docker-entrypoint.sh && \
-    echo 'if [ -n "$PORT" ]; then' >> /docker-entrypoint.sh && \
-    echo '  sed -i "s/listen 80;/listen ${PORT};/g" /etc/nginx/conf.d/default.conf' >> /docker-entrypoint.sh && \
-    echo 'fi' >> /docker-entrypoint.sh && \
-    echo 'exec nginx -g "daemon off;"' >> /docker-entrypoint.sh && \
-    chmod +x /docker-entrypoint.sh
-
 EXPOSE 80
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
