@@ -7,7 +7,7 @@ import { TaskService } from '../../../core/services/task.service';
 import { UserService } from '../../../core/services/user.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ProjectResponse } from '../../../core/models/project.model';
-import { TaskResponse } from '../../../core/models/task.model';
+import { TaskResponse, TaskStatus } from '../../../core/models/task.model';
 import { User } from '../../../core/models/user.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { StatusBadgePipe } from '../../../shared/pipes/status-badge.pipe';
@@ -29,6 +29,11 @@ export class ProjectDetailComponent implements OnInit {
   error = '';
   activeTab: 'tasks' | 'members' = 'tasks';
   showAddMember = false;
+
+  // Drag-and-drop state
+  draggedTask: TaskResponse | null = null;
+  dragOverColumn: string | null = null;
+  statusUpdating = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -156,5 +161,87 @@ export class ProjectDetailComponent implements OnInit {
 
   getPriorityClass(priority: string): string {
     return { 'LOW': 'priority-low', 'MEDIUM': 'priority-medium', 'HIGH': 'priority-high' }[priority] || '';
+  }
+
+  // ── Drag & Drop ──────────────────────────────────
+  onDragStart(event: DragEvent, task: TaskResponse): void {
+    this.draggedTask = task;
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', String(task.id));
+    }
+    // Add a slight delay so the browser captures the drag image first
+    setTimeout(() => {
+      const el = event.target as HTMLElement;
+      el.classList.add('dragging');
+    }, 0);
+  }
+
+  onDragOver(event: DragEvent, column: string): void {
+    event.preventDefault();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'move';
+    }
+    this.dragOverColumn = column;
+  }
+
+  onDragLeave(event: DragEvent, column: string): void {
+    // Only clear if we're actually leaving the column (not entering a child)
+    const relatedTarget = event.relatedTarget as HTMLElement;
+    const currentTarget = event.currentTarget as HTMLElement;
+    if (!currentTarget.contains(relatedTarget)) {
+      if (this.dragOverColumn === column) {
+        this.dragOverColumn = null;
+      }
+    }
+  }
+
+  onDrop(event: DragEvent, newStatus: TaskStatus): void {
+    event.preventDefault();
+    this.dragOverColumn = null;
+
+    if (!this.draggedTask || this.draggedTask.status === newStatus || this.statusUpdating) {
+      this.draggedTask = null;
+      return;
+    }
+
+    this.statusUpdating = true;
+    const taskId = this.draggedTask.id;
+    const oldStatus = this.draggedTask.status;
+
+    // Optimistic UI update
+    const taskIndex = this.tasks.findIndex(t => t.id === taskId);
+    if (taskIndex !== -1) {
+      this.tasks[taskIndex] = { ...this.tasks[taskIndex], status: newStatus };
+    }
+
+    this.taskService.updateTaskStatus(taskId, { status: newStatus }).subscribe({
+      next: (updated) => {
+        // Replace with server response
+        const idx = this.tasks.findIndex(t => t.id === updated.id);
+        if (idx !== -1) {
+          this.tasks[idx] = updated;
+        }
+        this.statusUpdating = false;
+      },
+      error: (err) => {
+        // Revert on failure
+        const idx = this.tasks.findIndex(t => t.id === taskId);
+        if (idx !== -1) {
+          this.tasks[idx] = { ...this.tasks[idx], status: oldStatus };
+        }
+        this.error = err.error?.message || 'Failed to update task status';
+        this.statusUpdating = false;
+      }
+    });
+
+    this.draggedTask = null;
+  }
+
+  onDragEnd(event: DragEvent): void {
+    const el = event.target as HTMLElement;
+    el.classList.remove('dragging');
+    this.draggedTask = null;
+    this.dragOverColumn = null;
   }
 }

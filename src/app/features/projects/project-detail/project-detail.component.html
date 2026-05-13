@@ -48,65 +48,104 @@
 
       <div class="task-board">
         <!-- TODO Column -->
-        <div class="board-column" id="column-todo">
+        <div class="board-column" id="column-todo"
+             [class.drag-over]="dragOverColumn === 'TODO'"
+             (dragover)="onDragOver($event, 'TODO')"
+             (dragleave)="onDragLeave($event, 'TODO')"
+             (drop)="onDrop($event, 'TODO')">
           <div class="column-header todo-header">
             <span class="column-dot dot-todo"></span> To Do
             <span class="column-count">{{ todoTasks.length }}</span>
           </div>
           <div class="column-tasks">
-            <a *ngFor="let task of todoTasks"
-               [routerLink]="['/tasks', task.id]"
+            <div *ngFor="let task of todoTasks"
                class="board-task-card"
-               [id]="'task-card-' + task.id">
-              <span class="task-title">{{ task.title }}</span>
-              <div class="task-card-bottom">
-                <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">{{ task.priority }}</span>
-                <span class="task-assignee" *ngIf="task.assignedTo">{{ task.assignedTo.name.charAt(0) }}</span>
-              </div>
-            </a>
+               [id]="'task-card-' + task.id"
+               draggable="true"
+               (dragstart)="onDragStart($event, task)"
+               (dragend)="onDragEnd($event)"
+               (click)="$event.stopPropagation()">
+              <a [routerLink]="['/tasks', task.id]" class="task-card-link">
+                <span class="task-title">{{ task.title }}</span>
+                <div class="task-card-bottom">
+                  <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">{{ task.priority }}</span>
+                  <span class="task-assignee" *ngIf="task.assignedTo">{{ task.assignedTo.name.charAt(0) }}</span>
+                </div>
+              </a>
+              <div class="drag-handle" title="Drag to move">⠿</div>
+            </div>
             <p class="column-empty" *ngIf="todoTasks.length === 0">No tasks</p>
+            <div class="drop-zone-hint" *ngIf="draggedTask && draggedTask.status !== 'TODO'">
+              <span>📝</span> Drop here → To Do
+            </div>
           </div>
         </div>
 
         <!-- IN PROGRESS Column -->
-        <div class="board-column" id="column-in-progress">
+        <div class="board-column" id="column-in-progress"
+             [class.drag-over]="dragOverColumn === 'IN_PROGRESS'"
+             (dragover)="onDragOver($event, 'IN_PROGRESS')"
+             (dragleave)="onDragLeave($event, 'IN_PROGRESS')"
+             (drop)="onDrop($event, 'IN_PROGRESS')">
           <div class="column-header progress-header">
             <span class="column-dot dot-progress"></span> In Progress
             <span class="column-count">{{ inProgressTasks.length }}</span>
           </div>
           <div class="column-tasks">
-            <a *ngFor="let task of inProgressTasks"
-               [routerLink]="['/tasks', task.id]"
+            <div *ngFor="let task of inProgressTasks"
                class="board-task-card"
-               [id]="'task-card-' + task.id">
-              <span class="task-title">{{ task.title }}</span>
-              <div class="task-card-bottom">
-                <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">{{ task.priority }}</span>
-                <span class="task-assignee" *ngIf="task.assignedTo">{{ task.assignedTo.name.charAt(0) }}</span>
-              </div>
-            </a>
+               [id]="'task-card-' + task.id"
+               draggable="true"
+               (dragstart)="onDragStart($event, task)"
+               (dragend)="onDragEnd($event)"
+               (click)="$event.stopPropagation()">
+              <a [routerLink]="['/tasks', task.id]" class="task-card-link">
+                <span class="task-title">{{ task.title }}</span>
+                <div class="task-card-bottom">
+                  <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">{{ task.priority }}</span>
+                  <span class="task-assignee" *ngIf="task.assignedTo">{{ task.assignedTo.name.charAt(0) }}</span>
+                </div>
+              </a>
+              <div class="drag-handle" title="Drag to move">⠿</div>
+            </div>
             <p class="column-empty" *ngIf="inProgressTasks.length === 0">No tasks</p>
+            <div class="drop-zone-hint" *ngIf="draggedTask && draggedTask.status !== 'IN_PROGRESS'">
+              <span>⚡</span> Drop here → In Progress
+            </div>
           </div>
         </div>
 
         <!-- DONE Column -->
-        <div class="board-column" id="column-done">
+        <div class="board-column" id="column-done"
+             [class.drag-over]="dragOverColumn === 'DONE'"
+             (dragover)="onDragOver($event, 'DONE')"
+             (dragleave)="onDragLeave($event, 'DONE')"
+             (drop)="onDrop($event, 'DONE')">
           <div class="column-header done-header">
             <span class="column-dot dot-done"></span> Done
             <span class="column-count">{{ doneTasks.length }}</span>
           </div>
           <div class="column-tasks">
-            <a *ngFor="let task of doneTasks"
-               [routerLink]="['/tasks', task.id]"
+            <div *ngFor="let task of doneTasks"
                class="board-task-card done-card"
-               [id]="'task-card-' + task.id">
-              <span class="task-title">{{ task.title }}</span>
-              <div class="task-card-bottom">
-                <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">{{ task.priority }}</span>
-                <span class="task-assignee" *ngIf="task.assignedTo">{{ task.assignedTo.name.charAt(0) }}</span>
-              </div>
-            </a>
+               [id]="'task-card-' + task.id"
+               draggable="true"
+               (dragstart)="onDragStart($event, task)"
+               (dragend)="onDragEnd($event)"
+               (click)="$event.stopPropagation()">
+              <a [routerLink]="['/tasks', task.id]" class="task-card-link">
+                <span class="task-title">{{ task.title }}</span>
+                <div class="task-card-bottom">
+                  <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">{{ task.priority }}</span>
+                  <span class="task-assignee" *ngIf="task.assignedTo">{{ task.assignedTo.name.charAt(0) }}</span>
+                </div>
+              </a>
+              <div class="drag-handle" title="Drag to move">⠿</div>
+            </div>
             <p class="column-empty" *ngIf="doneTasks.length === 0">No tasks</p>
+            <div class="drop-zone-hint" *ngIf="draggedTask && draggedTask.status !== 'DONE'">
+              <span>✅</span> Drop here → Done
+            </div>
           </div>
         </div>
       </div>
