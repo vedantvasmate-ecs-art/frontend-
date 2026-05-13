@@ -6,27 +6,25 @@ A premium, modern **Angular 19** frontend for the Ethara Team Task Manager. Feat
 
 ## 📸 Screenshots
 
-### Login Page
+### 🔐 Login Page
 ![Login Page](docs/screenshots/login.png)
-> Clean authentication page with floating animated decorations and glassmorphism card design.
+> Glassmorphism card design with animated ⚡ logo, email/password inputs with icons, and a gradient "Sign In" button.
 
-### Dashboard
-![Dashboard](docs/screenshots/dashboard.png)
-> Real-time stats cards, overdue alerts, and a full task overview at a glance.
+### 📊 Dashboard — Admin View
+![Dashboard Admin](docs/screenshots/dashboard-admin.png)
+> Admin dashboard showing 6 real-time stat cards (Total Tasks, To Do, In Progress, Completed, Overdue, Projects), "In Progress" task list, and "All My Tasks" section with navigation bar displaying user role badge.
 
-### Projects List
-![Projects](docs/screenshots/projects.png)
-> Card-based project grid with member counts, task counts, and admin-only actions.
+### 📊 Dashboard — Member View
+![Dashboard Member](docs/screenshots/dashboard-member.png)
+> Member dashboard with personalized greeting, assigned task stats, in-progress tasks with project names and due dates, and task status/priority badges.
 
-### Kanban Task Board (Drag & Drop)
-![Kanban Board](docs/screenshots/kanban.png)
-> Drag tasks between TODO → IN PROGRESS → DONE columns. Status updates automatically via API.
+### 📋 Kanban Task Board (Drag & Drop)
+![Kanban Board](docs/screenshots/kanban-board.png)
+> Full project detail page with Kanban board. Displays project info (name, description, avatar), quick stats (Tasks, Members, Done), tabbed interface (Tasks/Members), and three drag-and-drop columns: **TO DO**, **IN PROGRESS**, **DONE** — each with draggable task cards showing priority and assignee.
 
-### Task Detail
-![Task Detail](docs/screenshots/task-detail.png)
-> Full task information with one-click status transitions and role-based permissions.
-
-> **Note:** To generate screenshots, run the app locally and capture them into the `docs/screenshots/` folder.
+### 🔍 Kanban Board — Close Up
+![Kanban Closeup](docs/screenshots/kanban-closeup.png)
+> Close-up view of the Kanban columns with task cards featuring priority badges (MEDIUM, HIGH) and user avatar initials. Drag handle (⠿) on each card enables drag-and-drop between columns.
 
 ---
 
