@@ -230,6 +230,20 @@
   color: #a78bfa;
 }
 
+.home-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.home-link:hover {
+  color: #818cf8;
+}
+
 /* Background decoration */
 .auth-decoration {
   position: fixed;
@@ -274,6 +288,50 @@
   left: 50%;
   transform: translate(-50%, -50%);
   animation: float 6s ease-in-out infinite;
+}
+
+/* Role Toggle */
+.role-toggle {
+  display: flex;
+  gap: 0;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  border-radius: 14px;
+  padding: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.role-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 11px;
+  color: #64748b;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.role-btn:hover:not(.active) {
+  color: #94a3b8;
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.role-btn.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+}
+
+.role-icon {
+  font-size: 0.9rem;
 }
 
 @media (max-width: 480px) {

@@ -18,6 +18,6 @@ export class AppComponent {
 
   get showNavbar(): boolean {
     const url = this.router.url;
-    return this.authService.isLoggedIn() && !url.includes('/login') && !url.includes('/register');
+    return this.authService.isLoggedIn() && !url.includes('/login') && !url.includes('/register') && url !== '/';
   }
 }

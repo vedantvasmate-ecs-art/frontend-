@@ -20,6 +20,7 @@ export class RegisterComponent {
   fieldErrors: { [key: string]: string } = {};
   isLoading: boolean = false;
   showPassword: boolean = false;
+  selectedRole: string = 'MEMBER';
 
   constructor(private authService: AuthService, private router: Router) {
     if (this.authService.isLoggedIn()) {
@@ -38,7 +39,11 @@ export class RegisterComponent {
 
     this.isLoading = true;
 
-    this.authService.register(this.registerData).subscribe({
+    const registerObs = this.selectedRole === 'ADMIN'
+      ? this.authService.registerAdmin(this.registerData)
+      : this.authService.register(this.registerData);
+
+    registerObs.subscribe({
       next: () => {
         this.router.navigate(['/dashboard']);
       },

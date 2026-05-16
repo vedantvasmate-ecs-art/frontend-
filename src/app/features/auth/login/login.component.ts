@@ -19,6 +19,7 @@ export class LoginComponent {
   fieldErrors: { [key: string]: string } = {};
   isLoading: boolean = false;
   showPassword: boolean = false;
+  selectedRole: string = 'MEMBER';
 
   constructor(private authService: AuthService, private router: Router) {
     if (this.authService.isLoggedIn()) {

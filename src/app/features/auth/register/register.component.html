@@ -6,6 +6,16 @@
       <p>Join Ethara and start managing tasks</p>
     </div>
 
+    <!-- Role Toggle -->
+    <div class="role-toggle" id="register-role-toggle">
+      <button type="button" class="role-btn" [class.active]="selectedRole === 'MEMBER'" (click)="selectedRole = 'MEMBER'">
+        <span class="role-icon">👤</span> Member
+      </button>
+      <button type="button" class="role-btn" [class.active]="selectedRole === 'ADMIN'" (click)="selectedRole = 'ADMIN'">
+        <span class="role-icon">🔑</span> Admin
+      </button>
+    </div>
+
     <div class="auth-error" *ngIf="errorMessage" id="register-error">
       <span class="error-icon">⚠️</span>
       {{ errorMessage }}
@@ -94,6 +104,7 @@
 
     <div class="auth-footer">
       <p>Already have an account? <a routerLink="/login" id="goto-login">Sign in</a></p>
+      <a routerLink="/" class="home-link" id="goto-home-register">← Back to Home</a>
     </div>
   </div>
 
